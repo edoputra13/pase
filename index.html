@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Deepa Store - Mobile Flash Sale</title>
+  <style>
+    :root{--accent:#ff6b6b;--bg:#0f1724;--card:#0b1220;--glass:rgba(255,255,255,0.04)}
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{font-family:Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; margin:0;background:linear-gradient(180deg,#071028 0%, #071835 100%);color:#e6eef8;-webkit-font-smoothing:antialiased}
+    header{padding:14px 16px;display:flex;align-items:center;justify-content:space-between;gap:8px}
+    .brand{display:flex;align-items:center;gap:10px}
+    .logo{width:40px;height:40px;border-radius:8px;background:linear-gradient(135deg,var(--accent),#ffa94d);display:flex;align-items:center;justify-content:center;font-weight:700;color:#082032}
+    h1{font-size:16px;margin:0}
+    .subtitle{font-size:12px;opacity:.8}
+
+    main{padding:0 16px 80px}
+    .flash-card{background:linear-gradient(180deg, rgba(255,255,255,0.03), transparent);border-radius:12px;padding:12px;margin-bottom:14px;display:flex;align-items:center;gap:12px;backdrop-filter:blur(6px)}
+    .left{flex:1}
+    .countdown{display:flex;gap:8px;align-items:center}
+    .time-seg{background:var(--card);padding:8px 10px;border-radius:8px;min-width:48px;text-align:center;font-weight:700}
+    .products{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+    @media(min-width:640px){.products{grid-template-columns:repeat(3,1fr)}}
+
+    .card{background:var(--card);border-radius:12px;padding:10px;display:flex;flex-direction:column;gap:8px}
+    .img{width:100%;aspect-ratio:1/1;border-radius:8px;background:linear-gradient(135deg,#0b2540,#07203a);display:flex;align-items:center;justify-content:center;color:#8fb4ff;font-weight:700}
+    .title{font-size:14px}
+    .price{font-weight:700}
+    .row{display:flex;gap:8px;align-items:center;justify-content:space-between}
+    .btn{display:inline-flex;align-items:center;gap:8px;padding:8px 10px;border-radius:10px;background:var(--accent);color:#082032;font-weight:700;border:none;text-decoration:none}
+    .btn-wa{background:linear-gradient(90deg,#25D366,#22c55e);color:#042017}
+
+    footer{position:fixed;left:0;right:0;bottom:0;padding:10px 16px;background:linear-gradient(180deg, rgba(2,6,23,0.6), rgba(2,6,23,0.8));display:flex;gap:8px;align-items:center;justify-content:space-between}
+    .small{font-size:12px;opacity:.85}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <div class="logo">DS</div>
+      <div>
+        <h1>Deepa Store</h1>
+        <div class="subtitle">Flash Sale — Pilihan Terbaik untuk HP</div>
+      </div>
+    </div>
+    <div class="subtitle">Mobile friendly</div>
+  </header>
+
+  <main>
+    <!-- FLASH SALE CARD -->
+    <section class="flash-card" aria-live="polite">
+      <div class="left">
+        <div style="font-weight:800">Flash Sale Berlangsung!</div>
+        <div style="font-size:13px;opacity:.85">Diskon besar — hanya sampai waktu habis</div>
+      </div>
+      <div>
+        <div class="countdown" id="countdown">
+          <div class="time-seg" id="days">00</div>
+          <div class="time-seg" id="hours">00</div>
+          <div class="time-seg" id="mins">00</div>
+          <div class="time-seg" id="secs">00</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PRODUCT LIST -->
+    <section class="products" id="product-list">
+      <!-- product template inserted by JS -->
+    </section>
+  </main>
+
+  <footer>
+    <div class="small">Pilih produk lalu tekan "Order" untuk pesan via WhatsApp.</div>
+    <div class="small">Ganti nomor WA dan waktu flash sale di script jika perlu.</div>
+  </footer>
+
+<script>
+// ----- CONFIG: ubah nomor WA dan waktu akhir di sini -----
+const SELLER_WHATSAPP = '+6281234567890'; // contoh: +6281234567890 (ganti dengan nomor Anda tanpa spasi)
+// Set waktu akhir flash sale (format: YYYY-MM-DDTHH:MM:SS) - sesuaikan timezone
+const SALE_END_ISO = '2025-08-15T23:59:59';
+// -------------------------------------------------------
+
+// Sample catalog (ganti/muat dari server sesuai kebutuhan)
+const CATALOG = [
+  {id:1,name:'Earphone Bluetooth X1',price:'Rp99.000',desc:'Suara jernih, baterai 8 jam'},
+  {id:2,name:'Powerbank Slim 10.000mAh',price:'Rp149.000',desc:'Isi cepat, ringan'},
+  {id:3,name:'Case HP Anti-Shock',price:'Rp79.000',desc:'Proteksi maksimal, tipis'},
+  {id:4,name:'Charger Fast 30W',price:'Rp129.000',desc:'Pengisian aman'},
+  {id:5,name:'Kabel USB-C 1.5m',price:'Rp39.000',desc:'Kuat dan fleksibel'},
+  {id:6,name:'Holder Mobil Magnet',price:'Rp59.000',desc:'Magnet kuat, pemasangan mudah'},
+  // additional product to test special characters/encoding
+  {id:7,name:'Speaker "Mini" 5W (Bass+)',price:'Rp199.000',desc:'Suara mantap — cocok di meja kerja'}
+];
+
+// render products
+const productList = document.getElementById('product-list');
+function renderCatalog(){
+  productList.innerHTML = '';
+  CATALOG.forEach(p=>{
+    const card = document.createElement('article');
+    card.className = 'card';
+    card.innerHTML = `
+      <div class="img">${(p.name||'').split(' ').slice(0,2).map(s=>s[0]||'').join('')}</div>
+      <div class="title">${escapeHtml(p.name)}</div>
+      <div class="row"><div class="price">${escapeHtml(p.price)}</div><div style="font-size:12px;opacity:.8">${escapeHtml(p.desc)}</div></div>
+      <div class="row">
+        <a class="btn" href="#" onclick="openDetail(${p.id});return false;" aria-label="Detail ${escapeHtml(p.name)}">Detail</a>
+        <a class="btn btn-wa" href="${waLink(p)}" target="_blank" rel="noopener noreferrer" aria-label="Order ${escapeHtml(p.name)} via WhatsApp">Order</a>
+      </div>
+    `;
+    productList.appendChild(card);
+  });
+}
+
+// waLink now accepts either a product object OR a product id (robust)
+function waLink(productOrId){
+  let item = null;
+  if(productOrId && typeof productOrId === 'object' && productOrId.id !== undefined){
+    item = productOrId;
+  } else {
+    item = CATALOG.find(c=>c.id === productOrId);
+  }
+  if(!item){
+    console.error('waLink: product not found', productOrId);
+    // return a safe noop link to avoid runtime errors in href
+    return '#';
+  }
+  // Build message
+  const message = `Halo, saya mau pesan *${item.name}* (ID:${item.id}) — apakah masih ada?\nHarga: ${item.price}`;
+  const text = encodeURIComponent(message);
+  // wa.me link format: https://wa.me/<number>?text=<encoded text>
+  const number = (SELLER_WHATSAPP || '').replace(/[^\d+]/g,'');
+  const clean = number.startsWith('+') ? number.slice(1) : number;
+  if(!clean){
+    console.error('waLink: invalid SELLER_WHATSAPP', SELLER_WHATSAPP);
+    return '#';
+  }
+  return `https://wa.me/${clean}?text=${text}`;
+}
+
+function openDetail(id){
+  const item = CATALOG.find(c=>c.id===id);
+  if(!item){
+    alert('Produk tidak ditemukan.');
+    return;
+  }
+  alert(`${item.name}\n\n${item.desc}\nHarga: ${item.price}`);
+}
+
+// simple helper to avoid HTML injection in inserted strings
+function escapeHtml(str){
+  if(!str) return '';
+  return String(str).replace(/[&<>\"']/g, function(s) {
+    return ({
+      '&':'&amp;',
+      '<':'&lt;',
+      '>':'&gt;',
+      '"':'&quot;',
+      "'":'&#39;'
+    })[s];
+  });
+}
+
+renderCatalog();
+
+// Countdown
+const endTime = new Date(SALE_END_ISO).getTime();
+const daysEl = document.getElementById('days');
+const hoursEl = document.getElementById('hours');
+const minsEl = document.getElementById('mins');
+const secsEl = document.getElementById('secs');
+
+function updateCountdown(){
+  const now = Date.now();
+  let diff = endTime - now;
+  if(diff <= 0){
+    daysEl.textContent = '00'; hoursEl.textContent='00'; minsEl.textContent='00'; secsEl.textContent='00';
+    // optionally mark sale ended
+    const left = document.querySelector('.flash-card .left');
+    if(left) left.innerHTML = '<div style="font-weight:800">Flash Sale Selesai</div><div style="font-size:13px;opacity:.85">Kembali lagi untuk penawaran lain</div>';
+    clearInterval(timerInterval);
+    return;
+  }
+  const d = Math.floor(diff / (1000*60*60*24));
+  diff -= d*(1000*60*60*24);
+  const h = Math.floor(diff/(1000*60*60));
+  diff -= h*(1000*60*60);
+  const m = Math.floor(diff/(1000*60));
+  diff -= m*(1000*60);
+  const s = Math.floor(diff/1000);
+  daysEl.textContent = String(d).padStart(2,'0');
+  hoursEl.textContent = String(h).padStart(2,'0');
+  minsEl.textContent = String(m).padStart(2,'0');
+  secsEl.textContent = String(s).padStart(2,'0');
+}
+
+updateCountdown();
+const timerInterval = setInterval(updateCountdown,1000);
+
+// Accessibility: make buttons large tap targets on mobile
+(function(){
+  document.querySelectorAll('.btn').forEach(b=>{b.style.minWidth='80px'});
+})();
+</script>
+</body>
+</html>
