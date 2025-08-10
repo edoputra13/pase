@@ -25,14 +25,14 @@
       color:var(--text-color);
       -webkit-font-smoothing:antialiased;
       line-height:1.6; /* Improve readability */
+      /* Removed overflow: hidden; from body */
     }
 
-    /* General Layout */
-    body {
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh; /* Ensure body takes full viewport height */
-    }
+    /* Removed #site-wrapper styles */
+    /* Removed #intro-overlay styles */
+    /* Removed #intro-overlay h2 styles */
+    /* Removed #open-website-btn styles */
+
 
     header{
       padding:14px 16px;
@@ -116,18 +116,28 @@
     .card:hover {
       transform: translateY(-3px);
     }
+    /* Modified .img to hold actual image */
     .img{
       width:100%;
       aspect-ratio:1/1;
       border-radius:8px;
-      background:linear-gradient(135deg,#0b2540,#07203a);
+      background:linear-gradient(135deg,#0b2540,#07203a); /* Fallback background */
       display:flex;
       align-items:center;
       justify-content:center;
       color:#8fb4ff;
       font-weight:700;
       font-size: 1.5em; /* Larger text for initials */
+      overflow: hidden; /* Ensure image doesn't overflow rounded corners */
     }
+    .img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover; /* Cover the area, cropping if necessary */
+      display: block; /* Remove extra space below image */
+      border-radius: 8px; /* Apply border-radius to image itself */
+    }
+
     .title{
       font-size:15px; /* Slightly larger */
       font-weight: 600;
@@ -179,6 +189,23 @@
       font-style: italic;
     }
 
+    /* New: Stock display styles */
+    .product-stock {
+      font-size: 0.8em; /* Reduced from 0.9em */
+      color: var(--secondary-text-color);
+      margin-top: 4px;
+      text-align: center;
+      font-weight: 500;
+    }
+    .product-stock.low-stock {
+      color: var(--accent); /* Highlight low stock */
+      font-weight: 700;
+    }
+    .product-stock.out-of-stock {
+      color: #ff0000; /* Red for out of stock */
+      font-weight: 700;
+    }
+
 
     .btn{
       display:inline-flex;
@@ -197,14 +224,14 @@
       white-space: nowrap; /* Prevent text wrapping inside button */
     }
     .btn:hover{
-      background: #ff4d4d; /* Darker accent on hover */
+      background: #ff4d4d;
     }
     .btn-wa{
       background:linear-gradient(90deg,#25D366,#22c55e);
       color:#042017;
     }
     .btn-wa:hover{
-      background:linear-gradient(90deg,#1DAF51,#1AA04A); /* Darker green on hover */
+      background:linear-gradient(90deg,#1DAF51,#1AA04A);
     }
 
     footer{
@@ -299,17 +326,32 @@
       color: var(--secondary-text-color);
       margin-bottom: 20px;
     }
+    .modal-stock {
+      font-size: 0.9em;
+      color: var(--secondary-text-color);
+      margin-bottom: 15px;
+      font-weight: 600;
+    }
+    .modal-stock.low-stock {
+      color: var(--accent);
+    }
+    .modal-stock.out-of-stock {
+      color: #ff0000;
+    }
+
 
     /* Media Queries for Responsiveness */
 
     /* Small devices (phones, 600px and down) */
     @media (max-width: 600px) {
+      /* Removed #intro-overlay h2 styles */
+      /* Removed #open-website-btn styles */
+
       header {
         flex-direction: column;
         align-items: flex-start;
         padding: 10px 12px;
       }
-      /* Removed header .subtitle:last-child { display: none; } */
       h1 {
         font-size: 16px;
       }
@@ -318,7 +360,7 @@
         gap: 10px;
       }
       .products {
-        grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); /* Adjust for smaller cards */
+        grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
         gap: 8px;
       }
       .card {
@@ -331,11 +373,11 @@
         font-size: 1em;
       }
       .row {
-        flex-direction: column; /* Stack buttons on very small screens */
+        flex-direction: column;
         gap: 6px;
       }
       .btn {
-        width: 100%; /* Full width buttons */
+        width: 100%;
         padding: 8px 10px;
       }
       footer {
@@ -360,6 +402,12 @@
         padding: 1px 3px;
         min-width: 18px;
       }
+      .product-stock {
+        font-size: 0.7em;
+      }
+      .modal-stock {
+        font-size: 0.8em;
+      }
     }
 
     /* Medium devices (tablets, 601px to 768px) */
@@ -371,15 +419,15 @@
         padding: 0 20px 80px;
       }
       .flash-card {
-        flex-direction: row; /* Keep side-by-side */
+        flex-direction: row;
         text-align: left;
         padding: 15px;
       }
       .products {
-        grid-template-columns: repeat(3, 1fr); /* 3 columns for tablets */
+        grid-template-columns: repeat(3, 1fr);
       }
       footer {
-        flex-direction: row; /* Keep side-by-side */
+        flex-direction: row;
         padding: 10px 20px;
       }
     }
@@ -393,34 +441,26 @@
         padding: 0 40px 80px;
       }
       .flash-card {
-        flex-direction: row; /* Keep side-by-side */
+        flex-direction: row;
         text-align: left;
         padding: 15px 20px;
       }
       .products {
-        grid-template-columns: repeat(4, 1fr); /* 4 columns for desktops */
-        gap: 15px;
-      }
-      .card {
-        padding: 12px;
-      }
-      .title {
-        font-size: 16px;
-      }
-      .price {
-        font-size: 1.2em;
-      }
-      .btn {
-        padding: 10px 15px;
+        grid-template-columns: repeat(4, 1fr);
       }
       footer {
-        flex-direction: row; /* Keep side-by-side */
+        flex-direction: row;
         padding: 10px 40px;
       }
     }
   </style>
 </head>
 <body>
+
+  <!-- Removed Intro Overlay -->
+  <!-- Removed Audio Element -->
+
+  <!-- Site Content (No longer wrapped in #site-wrapper) -->
   <header>
     <div class="brand">
       <div class="logo">DS</div>
@@ -429,7 +469,6 @@
         <div class="subtitle">Flash Sale — Pilihan Terbaik untuk HP</div>
       </div>
     </div>
-    <!-- Removed the "Mobile friendly" subtitle div -->
   </header>
 
   <main>
@@ -439,7 +478,6 @@
         <div style="font-weight:800">Flash Sale Berlangsung!</div>
         <div style="font-size:13px;opacity:.85">Diskon besar — hanya sampai waktu habis</div>
       </div>
-      <!-- Removed global countdown div -->
     </section>
 
     <!-- PRODUCT LIST -->
@@ -459,6 +497,7 @@
       <button class="modal-close-btn" id="modal-close-btn">&times;</button>
       <h3 class="modal-title" id="modal-product-name"></h3>
       <p class="modal-price" id="modal-product-price"></p>
+      <p class="modal-stock" id="modal-product-stock"></p>
       <p class="modal-description" id="modal-product-description"></p>
       <a class="btn btn-wa" id="modal-order-btn" href="#" target="_blank" rel="noopener noreferrer">Order via WhatsApp</a>
     </div>
@@ -473,14 +512,14 @@ const SALE_END_ISO = '2025-08-15T23:59:59'; // This will be the end time for ALL
 
 // Sample catalog (ganti/muat dari server sesuai kebutuhan)
 const CATALOG = [
-  {id:1,name:'Earphone Bluetooth X1',price:'Rp99.000',desc:'Suara jernih, baterai 8 jam'},
-  {id:2,name:'Powerbank Slim 10.000mAh',price:'Rp149.000',desc:'Isi cepat, ringan'},
-  {id:3,name:'Case HP Anti-Shock',price:'Rp79.000',desc:'Proteksi maksimal, tipis'},
-  {id:4,name:'Charger Fast 30W',price:'Rp129.000',desc:'Pengisian aman'},
-  {id:5,name:'Kabel USB-C 1.5m',price:'Rp39.000',desc:'Kuat dan fleksibel'},
-  {id:6,name:'Holder Mobil Magnet',price:'Rp59.000',desc:'Magnet kuat, pemasangan mudah'},
+  {id:1,name:'Earphone Bluetooth X1',price:'Rp99.000',desc:'Suara jernih, baterai 8 jam', stock: 15, image: 'https://via.placeholder.com/150/FF6B6B/FFFFFF?text=Earphone'},
+  {id:2,name:'Powerbank Slim 10.000mAh',price:'Rp149.000',desc:'Isi cepat, ringan', stock: 5, image: 'https://via.placeholder.com/150/FFA94D/FFFFFF?text=Powerbank'},
+  {id:3,name:'Case HP Anti-Shock',price:'Rp79.000',desc:'Proteksi maksimal, tipis', stock: 2, image: 'https://via.placeholder.com/150/25D366/FFFFFF?text=Case'}, // Low stock example
+  {id:4,name:'Charger Fast 30W',price:'Rp129.000',desc:'Pengisian aman', stock: 0, image: 'https://via.placeholder.com/150/0B2540/FFFFFF?text=Charger'}, // Out of stock example
+  {id:5,name:'Kabel USB-C 1.5m',price:'Rp39.000',desc:'Kuat dan fleksibel', stock: 20, image: 'https://via.placeholder.com/150/8FB4FF/FFFFFF?text=Kabel'},
+  {id:6,name:'Holder Mobil Magnet',price:'Rp59.000',desc:'Magnet kuat, pemasangan mudah', stock: 8, image: 'https://via.placeholder.com/150/FF6B6B/FFFFFF?text=Holder'},
   // additional product to test special characters/encoding
-  {id:7,name:'Speaker "Mini" 5W (Bass+)',price:'Rp199.000',desc:'Suara mantap — cocok di meja kerja'}
+  {id:7,name:'Speaker "Mini" 5W (Bass+)',price:'Rp199.000',desc:'Suara mantap — cocok di meja kerja', stock: 10, image: 'https://via.placeholder.com/150/FFA94D/FFFFFF?text=Speaker'}
 ];
 
 // render products
@@ -490,14 +529,30 @@ function renderCatalog(){
   CATALOG.forEach(p=>{
     const card = document.createElement('article');
     card.className = 'card';
+
+    // Determine stock class
+    let stockClass = '';
+    let stockText = '';
+    if (p.stock === 0) {
+      stockClass = 'out-of-stock';
+      stockText = 'Stok Habis';
+    } else if (p.stock <= 5) { // Example threshold for low stock
+      stockClass = 'low-stock';
+      stockText = `Stok: ${p.stock} (Terbatas!)`;
+    } else {
+      stockText = `Stok: ${p.stock}`;
+    }
+
     card.innerHTML = `
-      <div class="img">${(p.name||'').split(' ').slice(0,2).map(s=>s[0]||'').join('')}</div>
+      <div class="img">
+        <img src="${escapeHtml(p.image)}" alt="${escapeHtml(p.name)}" loading="lazy">
+      </div>
       <div class="title">${escapeHtml(p.name)}</div>
       <div class="row">
         <div class="price">${escapeHtml(p.price)}</div>
       </div>
+      <div class="product-stock ${stockClass}">${escapeHtml(stockText)}</div>
       <div class="product-countdown" id="countdown-${p.id}">
-        <!-- Countdown will be updated by JS -->
         <span class="time-val" id="days-${p.id}">00</span><span class="time-label">h</span>
         <span class="time-val" id="hours-${p.id}">00</span><span class="time-label">j</span>
         <span class="time-val" id="mins-${p.id}">00</span><span class="time-label">m</span>
@@ -510,7 +565,6 @@ function renderCatalog(){
     `;
     productList.appendChild(card);
   });
-  // After rendering, initialize all countdowns
   initializeAllCountdowns();
 }
 
@@ -524,13 +578,10 @@ function waLink(productOrId){
   }
   if(!item){
     console.error('waLink: product not found', productOrId);
-    // return a safe noop link to avoid runtime errors in href
     return '#';
   }
-  // Build message
   const message = `Halo, saya mau pesan *${item.name}* (ID:${item.id}) — apakah masih ada?\nHarga: ${item.price}`;
   const text = encodeURIComponent(message);
-  // wa.me link format: https://wa.me/<number>?text=<encoded text>
   const number = (SELLER_WHATSAPP || '').replace(/[^\d+]/g,'');
   const clean = number.startsWith('+') ? number.slice(1) : number;
   if(!clean){
@@ -545,6 +596,7 @@ const productDetailModal = document.getElementById('product-detail-modal');
 const modalCloseBtn = document.getElementById('modal-close-btn');
 const modalProductName = document.getElementById('modal-product-name');
 const modalProductPrice = document.getElementById('modal-product-price');
+const modalProductStock = document.getElementById('modal-product-stock');
 const modalProductDescription = document.getElementById('modal-product-description');
 const modalOrderBtn = document.getElementById('modal-order-btn');
 
@@ -555,33 +607,41 @@ function openDetail(id){
     return;
   }
 
-  // Populate modal content
+  let modalStockText = '';
+  let modalStockClass = '';
+  if (item.stock === 0) {
+    modalStockText = 'Stok: Habis';
+    modalStockClass = 'out-of-stock';
+  } else if (item.stock <= 5) {
+    modalStockText = `Stok: ${item.stock} (Terbatas!)`;
+    modalStockClass = 'low-stock';
+  } else {
+    modalStockText = `Stok: ${item.stock}`;
+  }
+
   modalProductName.textContent = escapeHtml(item.name);
   modalProductPrice.textContent = escapeHtml(item.price);
+  modalProductStock.textContent = escapeHtml(modalStockText);
+  modalProductStock.className = `modal-stock ${modalStockClass}`;
   modalProductDescription.textContent = escapeHtml(item.desc);
-  modalOrderBtn.href = waLink(item); // Set WhatsApp link for the modal button
+  modalOrderBtn.href = waLink(item);
 
-  // Show the modal
   productDetailModal.classList.add('active');
-  document.body.style.overflow = 'hidden'; // Prevent scrolling background
+  document.body.style.overflow = 'hidden';
 }
 
 function closeDetailModal(){
   productDetailModal.classList.remove('active');
-  document.body.style.overflow = ''; // Restore scrolling
+  document.body.style.overflow = '';
 }
 
-// Close modal when close button is clicked
 modalCloseBtn.addEventListener('click', closeDetailModal);
-
-// Close modal when clicking outside the content
 productDetailModal.addEventListener('click', (e) => {
   if (e.target === productDetailModal) {
     closeDetailModal();
   }
 });
 
-// simple helper to avoid HTML injection in inserted strings
 function escapeHtml(str){
   if(!str) return '';
   return String(str).replace(/[&<>\"']/g, function(s) {
@@ -597,7 +657,7 @@ function escapeHtml(str){
 
 // --- Multiple Countdowns Logic ---
 const endTime = new Date(SALE_END_ISO).getTime();
-let countdownElements = {}; // Store references to all countdown elements
+let countdownElements = {};
 
 function initializeAllCountdowns() {
   CATALOG.forEach(p => {
@@ -608,7 +668,6 @@ function initializeAllCountdowns() {
       mins: document.getElementById(`mins-${p.id}`),
       secs: document.getElementById(`secs-${p.id}`)
     };
-    // Initial update for each countdown
     updateProductCountdown(p.id);
   });
 }
@@ -618,14 +677,14 @@ function updateProductCountdown(productId) {
   let diff = endTime - now;
   const els = countdownElements[productId];
 
-  if (!els || !els.container) return; // Element might not exist yet or was removed
+  if (!els || !els.container) return;
 
   if (diff <= 0) {
     els.days.textContent = '00';
     els.hours.textContent = '00';
     els.mins.textContent = '00';
     els.secs.textContent = '00';
-    els.container.innerHTML = 'Sale Ended!'; // Or any other message
+    els.container.innerHTML = 'Sale Ended!';
     els.container.classList.add('ended');
     return;
   }
@@ -644,20 +703,16 @@ function updateProductCountdown(productId) {
   els.secs.textContent = String(s).padStart(2, '0');
 }
 
-// Call renderCatalog to display products and initialize their countdowns
+// --- Initialization for direct display ---
+// Call renderCatalog directly when the script loads
 renderCatalog();
 
-// Set up a single interval to update all countdowns
-const globalTimerInterval = setInterval(() => {
-  CATALOG.forEach(p => {
-    updateProductCountdown(p.id);
-  });
-}, 1000);
-
-// Optional: Clear interval if all sales have ended (more complex for individual sales)
-// For a single global end time, you can check if endTime is reached.
-// If (endTime - Date.now() <= 0) { clearInterval(globalTimerInterval); }
+// Removed all intro overlay and music related JavaScript
+// Removed openWebsiteBtn, backgroundMusic, siteWrapper variables
+// Removed openWebsiteBtn.addEventListener
+// Removed DOMContentLoaded listener
 </script>
 </body>
 </html>
+
 
