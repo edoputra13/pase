@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Deepa Store - Flash Sale</title>
+  <style>
+    :root{
+      --accent:#6C5CE7;
+      --muted:#6b7280;
+      --bg:#0f172a;
+      --card:#0b1220;
+      --glass: rgba(255,255,255,0.03);
+      --glass-2: rgba(255,255,255,0.04);
+    }
+    *{box-sizing:border-box}
+    body{
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      margin:0;background:linear-gradient(180deg,#071028 0%, #071836 60%);color:#e6eef8; -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;padding:24px;
+    }
+    .container{max-width:1100px;margin:0 auto}
+    header{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:24px}
+    .brand{display:flex;align-items:center;gap:12px}
+    .logo{width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,var(--accent),#00c2ff);display:flex;align-items:center;justify-content:center;font-weight:800;color:white}
+    nav{display:flex;gap:12px}
+    nav a{color:var(--muted);text-decoration:none;font-weight:600}
+
+    .hero{display:grid;grid-template-columns:1fr 380px;gap:24px;align-items:center}
+    @media (max-width:900px){.hero{grid-template-columns:1fr}}
+
+    .card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:14px;padding:20px;box-shadow:0 6px 24px rgba(2,6,23,0.6);}
+
+    .title{font-size:28px;font-weight:700;margin-bottom:8px}
+    .subtitle{color:var(--muted);margin-bottom:18px}
+
+    .flash-wrap{display:flex;align-items:center;gap:12px}
+    .flash-badge{background:linear-gradient(90deg,#ff6b6b,#ff9f43);padding:8px 12px;border-radius:999px;font-weight:700;color:#081023}
+
+    .countdown{display:flex;gap:8px}
+    .countdown .seg{background:var(--glass);padding:10px 12px;border-radius:8px;text-align:center;min-width:64px}
+    .countdown .num{font-weight:800;font-size:18px}
+    .countdown .lbl{font-size:11px;color:var(--muted)}
+
+    .product{display:flex;gap:16px;align-items:center}
+    .thumb{width:120px;height:120px;border-radius:12px;background:linear-gradient(135deg,#183b6b,#2b6b8f);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700}
+    .price{font-size:20px;font-weight:800}
+    .old{color:var(--muted);text-decoration:line-through;font-weight:700;margin-left:8px;font-size:13px}
+
+    .actions{margin-top:16px;display:flex;gap:12px;flex-wrap:wrap}
+    .btn{padding:12px 16px;border-radius:10px;border:0;font-weight:700;cursor:pointer}
+    .btn-primary{background:linear-gradient(90deg,var(--accent),#00c2ff);color:#041025}
+    .btn-ghost{background:transparent;border:1px solid rgba(255,255,255,0.06);color:#e6eef8}
+
+    .whatsapp{display:inline-flex;align-items:center;gap:8px}
+
+    /* product grid */
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:24px}
+    @media (max-width:1000px){.grid{grid-template-columns:repeat(2,1fr)}}
+    @media (max-width:640px){.grid{grid-template-columns:1fr}}
+
+    .prod-card{background:var(--card);padding:14px;border-radius:12px}
+    .prod-card img{width:100%;border-radius:8px;display:block}
+
+    footer{margin-top:26px;color:var(--muted);font-size:13px;text-align:center}
+
+    /* small helpers */
+    .muted{color:var(--muted)}
+    .progress{height:10px;background:var(--glass);border-radius:999px;overflow:hidden}
+    .progress > span{display:block;height:100%;background:linear-gradient(90deg,#ff6b6b,#ff9f43);width:70%}
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="brand">
+        <div class="logo">DS</div>
+        <div>
+          <div style="font-weight:800">Deepa Store</div>
+          <div class="muted" style="font-size:13px">Pilihan produk terbaik</div>
+        </div>
+      </div>
+      <nav aria-label="Main navigation">
+        <a href="#products">Produk</a>
+        <a href="#flash">Flash Sale</a>
+        <a href="#contact">Kontak</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="card">
+          <div class="title">Flash Sale Spesial — Diskon Besar Terbatas</div>
+          <div class="subtitle">Dapatkan produk favoritmu dengan potongan harga spesial. Stok terbatas — buruan sebelum habis!</div>
+
+          <div id="flash" class="flash-wrap">
+            <div>
+              <div class="flash-badge">FLASH</div>
+            </div>
+            <div>
+              <div style="font-weight:700">Sisa waktu</div>
+              <div class="countdown" id="countdown">
+                <div class="seg"><div class="num" id="days">00</div><div class="lbl">Hari</div></div>
+                <div class="seg"><div class="num" id="hours">00</div><div class="lbl">Jam</div></div>
+                <div class="seg"><div class="num" id="minutes">00</div><div class="lbl">Menit</div></div>
+                <div class="seg"><div class="num" id="seconds">00</div><div class="lbl">Detik</div></div>
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-top:18px">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+              <div class="product">
+                <div class="thumb">GAMBAR</div>
+                <div>
+                  <div style="font-weight:800">Nama Produk Premium</div>
+                  <div class="muted" style="font-size:13px">Warna: Hitam • Stok: 12</div>
+                </div>
+              </div>
+              <div style="text-align:right">
+                <div class="price">Rp 129.000<span class="old">Rp 249.000</span></div>
+                <div class="muted" style="font-size:13px">Hemat 48%</div>
+              </div>
+            </div>
+
+            <div class="progress" style="margin-top:12px"><span style="width:44%"></span></div>
+
+            <div class="actions">
+              <button class="btn btn-primary" id="orderBtn">Order via WhatsApp</button>
+              <button class="btn btn-ghost" id="remindBtn">Tambah Pengingat</button>
+            </div>
+          </div>
+        </div>
+
+        <aside>
+          <div class="card">
+            <div style="font-weight:800;margin-bottom:8px">Ringkasan Flash Sale</div>
+            <div class="muted" style="font-size:13px">Berlaku sampai habis. Pembelian via WhatsApp — klik "Order" untuk konfirmasi pesanan dengan cepat.</div>
+
+            <div style="margin-top:14px;display:flex;flex-direction:column;gap:8px">
+              <div style="display:flex;justify-content:space-between"><div class="muted">Produk terjual</div><div style="font-weight:800">88</div></div>
+              <div style="display:flex;justify-content:space-between"><div class="muted">Pengunjung</div><div style="font-weight:800">1.2k</div></div>
+              <div style="display:flex;justify-content:space-between"><div class="muted">Rating</div><div style="font-weight:800">4.8 ★</div></div>
+            </div>
+
+          </div>
+        </aside>
+      </section>
+
+      <section id="products">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-top:18px">
+          <div style="font-weight:800;font-size:18px">Produk Populer</div>
+          <div class="muted">Lihat semua</div>
+        </div>
+
+        <div class="grid">
+          <div class="prod-card card">
+            <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&s=placeholder" alt="produk 1">
+            <div style="margin-top:10px;display:flex;justify-content:space-between;align-items:center">
+              <div>
+                <div style="font-weight:700">Earbuds X</div>
+                <div class="muted" style="font-size:13px">Rp 199.000</div>
+              </div>
+              <button class="btn btn-primary whatsapp" data-name="Earbuds X">Order</button>
+            </div>
+          </div>
+
+          <div class="prod-card card">
+            <img src="https://images.unsplash.com/photo-1526178616913-9b9c5a3b3f4b?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&s=placeholder" alt="produk 2">
+            <div style="margin-top:10px;display:flex;justify-content:space-between;align-items:center">
+              <div>
+                <div style="font-weight:700">Powerbank 20k</div>
+                <div class="muted" style="font-size:13px">Rp 159.000</div>
+              </div>
+              <button class="btn btn-primary whatsapp" data-name="Powerbank 20k">Order</button>
+            </div>
+          </div>
+
+          <div class="prod-card card">
+            <img src="https://images.unsplash.com/photo-1539883375779-5a8b3f1d6c7a?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&s=placeholder" alt="produk 3">
+            <div style="margin-top:10px;display:flex;justify-content:space-between;align-items:center">
+              <div>
+                <div style="font-weight:700">Smartwatch Z</div>
+                <div class="muted" style="font-size:13px">Rp 349.000</div>
+              </div>
+              <button class="btn btn-primary whatsapp" data-name="Smartwatch Z">Order</button>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+    </main>
+
+    <footer id="contact">© Deepa Store • Kontak: +62 812-3456-7890</footer>
+  </div>
+
+  <script>
+    // Default: flash sale ends in 48 hours. You can change by setting data-end on body or calling setFlashEnd()
+    (function(){
+      const defaultEnd = Date.now() + 48*60*60*1000; // 48 hours
+      let flashEnd = localStorage.getItem('flashEnd');
+      if(!flashEnd) localStorage.setItem('flashEnd', defaultEnd);
+      flashEnd = Number(localStorage.getItem('flashEnd')) || defaultEnd;
+
+      const daysEl = document.getElementById('days');
+      const hoursEl = document.getElementById('hours');
+      const minutesEl = document.getElementById('minutes');
+      const secondsEl = document.getElementById('seconds');
+
+      function updateCountdown(){
+        const now = Date.now();
+        const diff = Math.max(0, flashEnd - now);
+        const days = Math.floor(diff / (1000*60*60*24));
+        const hours = Math.floor((diff % (1000*60*60*24)) / (1000*60*60));
+        const minutes = Math.floor((diff % (1000*60*60)) / (1000*60));
+        const seconds = Math.floor((diff % (1000*60)) / 1000);
+        daysEl.textContent = String(days).padStart(2,'0');
+        hoursEl.textContent = String(hours).padStart(2,'0');
+        minutesEl.textContent = String(minutes).padStart(2,'0');
+        secondsEl.textContent = String(seconds).padStart(2,'0');
+
+        if(diff <= 0){
+          // sale ended
+          document.querySelectorAll('.flash-badge').forEach(b=>b.textContent='SELESAI');
+          document.getElementById('orderBtn').disabled = true;
+          clearInterval(timerId);
+        }
+      }
+      updateCountdown();
+      const timerId = setInterval(updateCountdown,1000);
+
+      // WhatsApp order handler
+      function openWhatsApp(phone, text){
+        // normalize phone: remove non-digit
+        const p = phone.replace(/[^0-9+]/g,'');
+        const encoded = encodeURIComponent(text);
+        const url = `https://wa.me/${p.replace(/^\+/, '')}?text=${encoded}`;
+        window.open(url,'_blank');
+      }
+
+      const defaultPhone = '6281234567890'; // ganti nomor owner toko
+      const mainOrderBtn = document.getElementById('orderBtn');
+      mainOrderBtn.addEventListener('click', ()=>{
+        const text = `Halo Deepa Store, saya mau order: Nama Produk Premium - Flash Sale`;
+        openWhatsApp(defaultPhone, text);
+      });
+
+      // product order buttons
+      document.querySelectorAll('.whatsapp').forEach(btn=>{
+        btn.addEventListener('click', ()=>{
+          const name = btn.dataset.name || 'Produk';
+          const qty = 1;
+          const text = `Halo Deepa Store, saya mau order: ${name} (qty ${qty})`;
+          openWhatsApp(defaultPhone, text);
+        });
+      });
+
+      // remind (basic) - triggers a calendar download
+      document.getElementById('remindBtn').addEventListener('click', ()=>{
+        const start = new Date();
+        const end = new Date(start.getTime()+60*60*1000);
+        const title = 'Flash Sale Deepa Store';
+        const ics = `BEGIN:VCALENDAR\nVERSION:2.0\nBEGIN:VEVENT\nUID:${Date.now()}@deepastore\nDTSTAMP:${formatICS(start)}\nDTSTART:${formatICS(start)}\nDTEND:${formatICS(end)}\nSUMMARY:${title}\nEND:VEVENT\nEND:VCALENDAR`;
+        const blob = new Blob([ics],{type:'text/calendar'});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url; a.download = 'deepa-flash-sale.ics';
+        document.body.appendChild(a); a.click(); a.remove();
+        URL.revokeObjectURL(url);
+      });
+
+      function formatICS(d){
+        return d.toISOString().replace(/[-:]/g,'').split('.')[0]+'Z';
+      }
+
+      // utility: allow developer to set flash end via console: setFlashEnd(timestamp)
+      window.setFlashEnd = function(ts){
+        // ts can be timestamp (ms) or ISO string
+        const v = (typeof ts === 'number') ? ts : Date.parse(ts);
+        if(!isNaN(v)){
+          localStorage.setItem('flashEnd', v);
+          location.reload();
+        } else console.warn('Invalid timestamp for setFlashEnd');
+      }
+
+    })();
+  </script>
+</body>
+</html>
